@@ -1,4 +1,4 @@
-const chromium = require('@sparticuz/chromium');
+const chromium = require('@sparticuz/chromium-min');
 const puppeteer = require('puppeteer-core');
 
 module.exports = async function(req, res) {
@@ -12,11 +12,13 @@ module.exports = async function(req, res) {
 
     let browser = null;
     try {
-        // Vercel-এর সার্ভারে হেডলেস ক্রোমিয়াম সেটআপ
+        // Vercel-এর Missing Library বাইপাস করার জন্য Remote Chromium Pack
         browser = await puppeteer.launch({
-            args: chromium.args,
+            args: [...chromium.args, '--hide-scrollbars', '--disable-web-security'],
             defaultViewport: chromium.defaultViewport,
-            executablePath: await chromium.executablePath(),
+            executablePath: await chromium.executablePath(
+                'https://github.com/Sparticuz/chromium/releases/download/v123.0.1/chromium-v123.0.1-pack.tar'
+            ),
             headless: chromium.headless,
             ignoreHTTPSErrors: true,
         });
@@ -35,7 +37,7 @@ module.exports = async function(req, res) {
 
         // কাস্টম ফন্ট এবং ছবি পুরোপুরি লোড হওয়ার জন্য অতিরিক্ত অপেক্ষা
         await page.evaluateHandle('document.fonts.ready');
-        await new Promise(resolve => setTimeout(resolve, 800));
+        await new Promise(resolve => setTimeout(resolve, 1000));
 
         // রেন্ডার কন্টেইনার সিলেক্ট করা
         const element = await page.$('#render-container');
