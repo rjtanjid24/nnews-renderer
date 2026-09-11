@@ -2,6 +2,9 @@
   "name": "nnews-renderer",
   "version": "1.0.0",
   "main": "api/screenshot.js",
+  "engines": {
+    "node": "18.x"
+  },
   "dependencies": {
     "@sparticuz/chromium-min": "123.0.1",
     "puppeteer-core": "22.6.0"
